@@ -1,9 +1,9 @@
 # [Info]
 # 左上角标题
-site_name: 杨希杰的个人网站
-site_url: https://yang-xijie.github.io
-site_author: 杨希杰
-site_description: 杨希杰的个人网站
+site_name: 杨志鹏的个人网站
+site_url: https://yangdax1an.github.io/mydocs/
+site_author: 杨志鹏
+site_description: 杨志鹏的个人网站（参考https://yang-xijie.github.io/BLOG/Markdown/mkdocs-site/）
 
 # [Navigtion]
 nav:
