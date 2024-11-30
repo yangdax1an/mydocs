@@ -1,8 +1,9 @@
 # 你好
 
-这里是杨志鹏的个人网站 <https://yangdax1an.github.io/mydocs/>
-参考杨希节同学的网站进行的二次开发<https://github.com/Yang-Xijie/yang-xijie.github.io>
-网站的文章部分暂时没有更新为我本人的，后续会进行替换
+这里是杨志鹏的个人网站 <https://yangdax1an.github.io/mydocs/><br>
+参考杨希节同学的网站进行的二次开发<https://github.com/Yang-Xijie/yang-xijie.github.io><br>
+网站的文章部分暂时没有更新为我本人的，后续会进行替换<br>
+
 - 通过主题和目录浏览文章。
     - 电脑端：在上方标签栏选择主题，在左侧目录选择文章。
     - 移动端：点击左上角图标选择主题和文章。
@@ -21,7 +22,6 @@
     - 主要研究方向
         - EDA算法
         - 高层次逻辑综合
-        <!-- - 3D Reconstruction -->
 
 ## 个人信息
 
