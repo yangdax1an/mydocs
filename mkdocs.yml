@@ -13,13 +13,13 @@ nav:
     - ME/profile.md
     - ME/contact.md
     - ME/account.md
-    - ME/qq-groups.md
+    # - ME/qq-groups.md
     - ME/description.md
     - ME/ability.md
-    - ME/experience.md
-    - ME/thu-curriculum.md
-    - ME/thu-certificate.md
-    - ME/daily-necessities.md
+    # - ME/experience.md
+    # - ME/thu-curriculum.md
+    # - ME/thu-certificate.md
+    # - ME/daily-necessities.md
     - ME/support.md
   - 讲稿:
     - LECTURE/index.md

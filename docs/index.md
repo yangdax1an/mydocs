@@ -1,7 +1,8 @@
 # 你好
 
 这里是杨志鹏的个人网站 <https://yangdax1an.github.io/mydocs/>
-
+参考杨希节同学的网站进行的二次开发<https://github.com/Yang-Xijie/yang-xijie.github.io>
+网站的文章部分暂时没有更新为我本人的，后续会进行替换
 - 通过主题和目录浏览文章。
     - 电脑端：在上方标签栏选择主题，在左侧目录选择文章。
     - 移动端：点击左上角图标选择主题和文章。
@@ -17,8 +18,6 @@
 - (2024.9 - 2027.6 预计) [大连理工大学软件学院](https://ss.dlut.edu.cn/index.htm)硕士
     - 导师 [江贺](https://faculty.dlut.edu.cn/jianghe/zh_CN/index.htm)
     - 课题组 [Oscar-lab](http://oscar-lab.org/chn/index.htm)
-        <!-- - PI [戴勃](http://daibo.info)
-        #- mentor [徐霖宁](https://eveneveno.github.io/lnxu/) -->
     - 主要研究方向
         - EDA算法
         - 高层次逻辑综合

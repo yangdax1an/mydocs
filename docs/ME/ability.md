@@ -6,8 +6,20 @@
 - 日语能力：N3 同等水平，能够使用日语进行日常对话
 
 ## 开发
-
-- ML
+- Java开发技术栈
+  - [Java基础]
+  - [JavaWeb]
+  - [MySql]
+  - [Tomcat]
+  - [Servlet]
+  - [Spring]
+  - [SpringBoot]
+  - [SpringMVC]
+  - [SpringCloud]
+  - [Mybatis]
+  - [Maven]
+  - [JVM]
+<!-- - ML
     - [PyTorch](https://pytorch.org) / [Python](https://www.python.org)
     - [WebGPU](https://developer.mozilla.org/en-US/docs/Web/API/WebGPU_API)
 - Web
@@ -20,7 +32,7 @@
     - [Xcode](https://developer.apple.com/xcode/) / [SwiftUI](https://developer.apple.com/xcode/swiftui/) / [Swift](https://developer.apple.com/swift/)
 - 3D
     - [Three.js](https://threejs.org)
-    - [Blender](https://www.blender.org)
+    - [Blender](https://www.blender.org) -->
 
 ## 创作
 
