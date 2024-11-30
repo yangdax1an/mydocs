@@ -21,6 +21,10 @@ nav:
     # - ME/thu-certificate.md
     # - ME/daily-necessities.md
     - ME/support.md
+  - 开发工具笔记: 
+    - ToolsNote/index.md
+    - Markdown:
+      - Markdown使用方法: ToolsNote/Markdown/Markdown.md
   - 讲稿:
     - LECTURE/index.md
     - Linux:
