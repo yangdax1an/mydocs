@@ -1,6 +1,6 @@
 # 你好
 
-这里是杨希杰的个人网站 <https://yang-xijie.github.io>
+这里是杨志鹏的个人网站 <https://yangdax1an.github.io/mydocs/>
 
 - 通过主题和目录浏览文章。
     - 电脑端：在上方标签栏选择主题，在左侧目录选择文章。
@@ -9,19 +9,20 @@
 
 ---
 
-> 以下信息更新于 240523
+> 以下信息更新于 241130
 
 ## 主要经历与个人现状
 
-- (2019.9 - 2023.6) [清华大学电子工程系](https://www.ee.tsinghua.edu.cn)本科
-- (2023.9 - 2028.6 预计) [浙江大学计算机学院](http://www.cs.zju.edu.cn/csen/)与[上海人工智能实验室](https://www.shlab.org.cn)联合培养直博生
-    - 导师 [林达华](https://www.ie.cuhk.edu.hk/faculty/lin-dahua/)
-    - 课题组 [Intelligent Digital Creation Group](https://idc-sh.github.io)
-        - PI [戴勃](http://daibo.info)
-        - mentor [徐霖宁](https://eveneveno.github.io/lnxu/)
+- (2020.9 - 2024.6) [合肥工业大学计算机与信息学院](https://ci.hfut.edu.cn/)本科
+- (2024.9 - 2027.6 预计) [大连理工大学软件学院](https://ss.dlut.edu.cn/index.htm)硕士
+    - 导师 [江贺](https://faculty.dlut.edu.cn/jianghe/zh_CN/index.htm)
+    - 课题组 [Oscar-lab](http://oscar-lab.org/chn/index.htm)
+        <!-- - PI [戴勃](http://daibo.info)
+        - mentor [徐霖宁](https://eveneveno.github.io/lnxu/) -->
     - 主要研究方向
-        - 3D Representation
-        - 3D Reconstruction
+        - EDA算法
+        - 高层次逻辑综合
+        <!-- - 3D Reconstruction -->
 
 ## 个人信息
 
