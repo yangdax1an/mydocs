@@ -18,7 +18,7 @@
     - 导师 [江贺](https://faculty.dlut.edu.cn/jianghe/zh_CN/index.htm)
     - 课题组 [Oscar-lab](http://oscar-lab.org/chn/index.htm)
         <!-- - PI [戴勃](http://daibo.info)
-        - mentor [徐霖宁](https://eveneveno.github.io/lnxu/) -->
+        #- mentor [徐霖宁](https://eveneveno.github.io/lnxu/) -->
     - 主要研究方向
         - EDA算法
         - 高层次逻辑综合
