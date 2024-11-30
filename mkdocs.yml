@@ -3,7 +3,7 @@
 site_name: 杨志鹏的个人网站
 site_url: https://yangdax1an.github.io/mydocs/
 site_author: 杨志鹏
-site_description: 杨志鹏的个人网站（参考https://yang-xijie.github.io/BLOG/Markdown/mkdocs-site/）
+site_description: 杨志鹏的个人网站（参考杨希节同学主页https://yang-xijie.github.io/BLOG/Markdown/mkdocs-site/）
 
 # [Navigtion]
 nav:
@@ -406,12 +406,12 @@ edit_uri: edit/main/docs/
 # [top-right corner]
 # [添加 GitHub 仓库]
 # https://squidfunk.github.io/mkdocs-material/setup/adding-a-git-repository/
-repo_url: https://github.com/Yang-Xijie/yang-xijie.github.io
-repo_name: yang-xijie.github.io
+repo_url: https://yangdax1an.github.io/mydocs/
+repo_name: yangdax1an.github.io
 # [bottom-left corner]
 # [版权说明]
 # https://squidfunk.github.io/mkdocs-material/setup/setting-up-the-footer/#copyright-notice
-copyright: 杨希杰 CC-BY-4.0
+copyright: 杨志鹏 CC-BY-4.0
 # [bottom-right corner]
 extra:
   # [添加社交网络图标和链接]
@@ -419,24 +419,24 @@ extra:
   # 搜索图标：https://squidfunk.github.io/mkdocs-material/reference/icons-emojis/#search
   # name 会在鼠标悬浮时提示
   social: # icons
-    - name: GitHub | Yang-Xijie
+    - name: GitHub | yangdax1an
       icon: fontawesome/brands/github
-      link: https://github.com/Yang-Xijie
-    - name: Bilibili | 杨希杰619
+      link: https://github.com/yangdax1an
+    - name: Bilibili | 杨志鹏728
       icon: fontawesome/brands/bilibili
-      link: https://space.bilibili.com/24502827
-    - name: 小杰答疑群 QQ 796233390
-      icon: fontawesome/brands/qq
-      link: https://yang-xijie.github.io/ME/qq-groups/
-    - name: 小杰水群 QQ 824114857
-      icon: fontawesome/brands/qq
-      link: https://yang-xijie.github.io/ME/qq-groups/
-    - name: 小红书 | 杨希杰
-      icon: fontawesome/solid/images
+      link: https://space.bilibili.com/39606186
+    # - name: 小杰答疑群 QQ 796233390
+    #   icon: fontawesome/brands/qq
+    #   link: https://yang-xijie.github.io/ME/qq-groups/
+    # - name: 小杰水群 QQ 824114857
+    #   icon: fontawesome/brands/qq
+    #   link: https://yang-xijie.github.io/ME/qq-groups/
+    - name: 小红书 | 杨志鹏728
+      icon: material/book
       link: https://www.xiaohongshu.com/user/profile/61be0cc10000000021024369
     - name: 打赏支持
       icon: fontawesome/solid/mug-saucer
-      link: https://yang-xijie.github.io/ME/support/
+      link: https://yangdax1an.github.io/mydocs/ME/support/
 
 # [Extensions]
 plugins:

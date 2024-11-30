@@ -1,25 +1,25 @@
 # 个人介绍
 
-> 更新于 240329
+> 更新于 241130
 
 ## 个人信息
 
-- 姓名：杨希杰
+- 姓名：杨志鹏
 - 性别：男
 
 [更多点击查看](./profile.md)
 
 ## 联系方式
 
-- 邮箱：564197835@qq.com
+- 邮箱：1878059427@qq.com
 
 [更多点击查看](./contact.md)
 
 ## 公众账号
 
-- [GitHub](https://github.com/Yang-Xijie)
-- [Bilibili](https://space.bilibili.com/24502827)
-- [小红书](https://www.xiaohongshu.com/user/profile/61be0cc10000000021024369)
+- [GitHub](https://github.com/yangdax1an)
+- [Bilibili](https://space.bilibili.com/39606186)
+- [小红书](https://www.xiaohongshu.com/user/profile/626e0a41000000002102668d)
 
 [更多点击查看](./account.md)
 
