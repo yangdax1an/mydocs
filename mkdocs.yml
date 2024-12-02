@@ -25,6 +25,8 @@ nav:
     - ToolsNote/index.md
     - Markdown:
       - Markdown使用方法: ToolsNote/Markdown/Markdown.md
+    - Linux:
+      - Linux使用方法: ToolsNote/Linux/LinuxNotes.md
   - 讲稿:
     - LECTURE/index.md
     - Linux:
