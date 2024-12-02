@@ -77,3 +77,876 @@ Hello, world!
 计算机中文件存储在硬盘里面，本质上都是`0`和`1`。如果分类可以大致分为**纯文本文件**（由字符编码组成）、**媒体文件**（由按照一定方式组织的媒体信息构成）、**程序**（由CPU可以直接运行的机器码构成）。
 
 **文件的名字**一般由两部分构成，前半部分为可以随便起的**文件名称**，后半部分用**后缀名**来表示该文件的类型，一般由生成该文件的软件进行确定，用户不必更改；操作系统则通过文件后缀名决定可以用哪个 / 些程序来打开该文件。
+
+
+
+### 命令行程序
+
+#### 终端和shell
+
+**终端**是一个应用程序，其可以开启多个**shell**。**shell**也是一个程序，你可以让`shell`来处理你的命令。
+
+**打开终端和shell**：可以使用`cmd`终端(win+r 输入cmd)或者更高级的`powershell`（win+r 输入powershell），只要打开了终端，终端会自动帮你打开一个`shell`。
+
+#### shell 功能 解析你输入的命令
+
+##### 通过绝对路径打开命令行程序并使用
+
+**通过`C:\WINDOWS\system32\ping`程序来认识命令行程序**：那么`shell`能做什么呢？第一个功能——通过绝对路径打开命令行程序。比如我们使用`cmd`找到ping的绝对位置`C:\WINDOWS\system32\ping.exe`，我们可以写出其绝对路径，复制到终端的`shell`中，然后加上我们自己的本机ip地址敲击回车。
+
+```
+$ C:\WINDOWS\system32\PING.EXE 127.0.0.1
+正在 Ping 127.0.0.1 具有 32 字节的数据:
+来自 127.0.0.1 的回复: 字节=32 时间<1ms TTL=128
+来自 127.0.0.1 的回复: 字节=32 时间<1ms TTL=128
+来自 127.0.0.1 的回复: 字节=32 时间<1ms TTL=128
+来自 127.0.0.1 的回复: 字节=32 时间<1ms TTL=128
+
+127.0.0.1 的 Ping 统计信息:
+    数据包: 已发送 = 4，已接收 = 4，丢失 = 0 (0% 丢失)，
+往返行程的估计时间(以毫秒为单位):
+    最短 = 0ms，最长 = 0ms，平均 = 0ms
+```
+
+这个程序打开之后，返回我们通过网络访问我们自己电脑的情况，因为是访问我们自己，因此数据包都不会丢失。
+
+当然我们可以直接输入`C:\WINDOWS\system32\ping.exe`来查看操作帮助
+
+```
+$ C:\WINDOWS\system32\ping.exe
+用法: ping [-t] [-a] [-n count] [-l size] [-f] [-i TTL] [-v TOS]
+            [-r count] [-s count] [[-j host-list] | [-k host-list]]
+            [-w timeout] [-R] [-S srcaddr] [-c compartment] [-p]
+            [-4] [-6] target_name
+
+选项:
+    -t             Ping 指定的主机，直到停止。
+                   若要查看统计信息并继续操作，请键入 Ctrl+Break；
+                   若要停止，请键入 Ctrl+C。
+    -a             将地址解析为主机名。
+    -n count       要发送的回显请求数。
+    ......
+```
+
+这里我们发现在程序的绝对路径和输入（一个用来格式化的字符串）之间，有一个**空格**。这一个空格作为shell区分程序和输入（参数）的分隔符。
+
+我们还可以输入一些其他的参数，比如`-n 3`：
+
+```
+PS C:\Users\dell> C:\WINDOWS\system32\PING.EXE -n 3 www.baidu.com
+
+正在 Ping www.a.shifen.com [182.61.200.6] 具有 32 字节的数据:
+来自 182.61.200.6 的回复: 字节=32 时间=19ms TTL=45
+来自 182.61.200.6 的回复: 字节=32 时间=19ms TTL=45
+来自 182.61.200.6 的回复: 字节=32 时间=20ms TTL=45
+
+182.61.200.6 的 Ping 统计信息:
+    数据包: 已发送 = 3，已接收 = 3，丢失 = 0 (0% 丢失)，
+往返行程的估计时间(以毫秒为单位):
+    最短 = 19ms，最长 = 20ms，平均 = 19ms
+```
+
+这样我们就可以只显示最先的3条情况作为输出返回。
+
+总结一下，我们刚刚认识了一个命令行程序`ping`。后面添加ip地址或者域名可以让我们查看我们当前的网络情况；给一些参数（相当于特殊的输入）可以执行一些操作，比如查看最新的三条数据；最终返回一个字符串。终端则通过操作系统、将这个字符串显示在你的屏幕上。**可以看到，命令行程序一般将字符串作为输入和输出；输入输出这一点和GUI程序是一样的。**
+
+##### 通过命令让shell来解析你要调用的程序
+
+` C:\WINDOWS\system32\PING.EXE`这个程序，如果我们没有在之前机缘巧合的在`system32`目录下发现它，我们还怎么使用终端来查看网络连接情况呢？事实上，我要调用一个程序，如果总是写它的绝对路径，那不是很累吗？`ping`这个程序还好，但如果是其他放在多级文件下的数据，那不是写路径就要写好久吗？
+
+比较直观的认识是，我们直接输入这个程序的名字`ping`，然后这个程序被调用。来试试可否？
+
+```
+$ ping 127.0.0.1
+```
+
+我们发现是可以的。不过这背后是什么原理呢？其实是`shell`立了大功劳。我们刚刚说到，你可以在`shell`中输入一个命令行程序的绝对路径以调用打开这个程序。但其实`shell`的作用不是识别路径，而是`解析字符串`。当你输入一串字符，`shell`就会去找这个字符串对应的程序。如果这个字符串是一个绝对路径，那`shell`当然可以直接找到你想调用的程序；如果是一个单词，`shell`会在**环境变量**中找这个单词对应的程序——因此，你可以通过一个单词方便的调用一个命令行程序（如果这个程序在环境变量中的话）。
+
+那么什么是环境变量呢？其实就是一系列存放命令行程序的文件夹。使用下面的命令可以查看环境变量（Powershell为$Env:PATH、cmd为%PATH%）：
+
+```
+$PS C:\Users\dell> echo $Env:PATH
+C:\msys64\mingw64\bin;E:\VMware\bin\;C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;E:\VSCode\Microsoft VS Code\bin;C:\Program Files\dotnet\;C:\msys64\mingw64\bin;C:\Program Files\Git\cmd;C:\Program Files\Git\bin;C:\Users\dell\.jdks\openjdk-11\bin;C:\Users\dell\.jdks\openjdk-23.0.1\bin;C:\Program Files\nodejs\;E:\jetbrain_tool\IntelliJ IDEA Ultimate\plugins\maven\lib\maven3\bin;E:\develop\mysql-8.4.2-winx64\bin;E:\develop\texlive\2024\bin\windows;E:\mdbook\mdBook\target\release;C:\Users\dell\.cargo\bin;C:\Users\dell\AppData\Local\Programs\Python\Launcher\;C:\Users\dell\AppData\Local\Microsoft\WindowsApps;C:\Users\dell\AppData\Local\JetBrains\Toolbox\scripts;C:\Users\dell\AppData\Roaming\npm;C:\Users\dell\AppData\Local\Microsoft\WindowsApps;
+```
+
+我们发现这确实是一系列路径，使用冒号隔开。在其中我们发现了`system32`，也就是说，当你输入一个单词的时候，`shell`就会去环境变量下找这个单词对应的程序，从而确定你要调用的程序。
+
+
+
+#### 自己写命令行程序
+
+刚刚我们初识了一些**类Unix系统**自带的命令行程序，当然这些程序有很多，大家如果熟练掌握，不论是在以后编写代码还是实际开发的过程中都会有很大的效率提升。我们之后也会介绍一些比较重要的命令行程序。不过这时有些同学就会问了，「我能编写这样的命令行程序吗？」
+
+当然可以了！相信在座的大多数同学都有写过`C`和`C++`程序的经历，接下来我们尝试用`终端`和`shell`来写一个自己的命令行程序。我们希望能在桌面上新建一个文件夹，在这个文件夹内编写`cpp`代码，然后将其编译为一个可执行文件，并执行它。
+
+##### 切换路径
+
+使用`pwd`（`print working directory`）命令可以获得**当前shell的工作路径**。像我的终端经过配置，所以这个路径可以直接看到。使用`cd`（`change directory`）路径可以更换当前路径。在当前路径下，可以使用`mkdir`（`make directory`）命令创建文件夹，文件夹也可以以相对路径的形式呈现。`ls`（`list`）命令则可以列出当前目录下的所有文件和文件夹。
+
+```
+$ pwd
+Path
+----
+C:\Users\dell
+$ ls
+d-----        2024/10/13     10:59                .android
+d-----        2024/11/29     21:46                .cargo
+d-----         2024/11/4     22:30                .chatgpt
+d-----         2024/10/7     19:07                .codeintel
+d-----        2024/10/30     11:56                .conda
+d-----         2024/10/1     20:36                .crossnote
+d-----        2024/10/25     18:13                .ipython
+d-r---         2024/12/2     20:57                Desktop
+…
+$ cd Desktop
+$ ls
+$ cd test
+cd: no such file or directory: CODE
+$ mkdir test
+$ cd test
+$ pwd
+Path
+----
+C:\Users\dell\Desktop\test
+```
+
+这样我们就成功切换了`shell的工作路径`（当前路径）。
+
+##### 编写代码
+
+我们想写下面的这个小程序（输入你的名字，程序跟你打招呼）：
+
+```cpp
+#include<cstdio>
+
+int main(){
+  char name[100];
+  printf("Please input your name: ");
+  scanf("%s", name);
+  printf("Hello, %s", name);
+}
+```
+
+先用命令行程序的文本编辑器`vim`（Windows环境下建议直接GUI来操作文件）来将上面这一段代码写入文件`SayHello.cpp`（接收一个参数表示你要新建的纯文本文件的名字）：
+
+```
+#Mac环境下
+$ vim SayHello.cpp
+```
+
+进入`vim`编辑器之后，我们按`i`进入编辑模式，将上面这段代码复制到`vim`中。这时我们完成了编辑要保存退出，先按`esc`退出编辑模式，再按`:`以输入编辑器的选项，我们使用`wq`保存退出（`write` `quit`）。（注，也可以先按`⎋`退出编辑模式，再用`ZZ`退出）
+
+不妨来看看文件里面写了什么，`cat`命令可以用来查看纯文本文件：
+
+```
+$ cat SayHello.cpp
+#include<cstdio>
+
+int main(){
+  char name[100];
+  printf("Please input your name: ");
+  scanf("%s", name);
+  printf("Hello, %s", name);
+}
+```
+
+补充：关于`vim`的使用方式，我简单做了整理，大家可以进行参考：[vim学习笔记](https://blog.csdn.net/qq_45379253/article/details/115872968)。记得，`vim`是一款**查看器**和**编辑器**，它能做到的事情和你电脑上文本编辑器所能做到的事情是一样的。
+
+##### 编译链接 获得命令行程序并执行
+
+在`Windows`上，我这边使用`g++`编译器来做这件事情。第一个参数是输入的代码文件，后面`-o`参数是输出的文件名。在`windows`上，可执行文件（命令行程序）一般以`.exe`为后缀；但在`类Unix操作系统`上，可执行文件一般不设置后缀。
+
+```
+ gcc .\SayHello.cpp -o "SayHello"
+```
+
+我们可以使用绝对路径或相对路径来调用这个程序。（但注意，这里不能直接输单词，因为`shell`收到单词会在环境变量中找对应的程序，而你自己写的程序还没有添加到环境变量中）
+
+```
+$ ls
+SayHello     SayHello.cpp
+$ /Users/yangxijie/desktop/CODE/SayHello
+…
+$ SayHello
+zsh: command not found: SayHello
+$ .\SayHello
+…
+```
+
+补充：在`macOS`上使用`clang`和`g++`可能需要安装`Command Line Tools`，在Windows上同理，可能需要`Mingw64`
+
+### 常用的shell命令
+
+常用的`shell命令`（`Linux命令`）有很多，下面写的是一些比较常见的。当然大家之后使用服务器还会使用到各种各样的命令，可以参考[菜鸟教程｜Linux](https://www.runoob.com/linux/linux-tutorial.html)，推荐大家直接百度查。
+
+#### 与工作路径相关
+
+```shell
+pwd # 显示当前工作路径
+
+cd # 切换当前路径
+cd .. # 返回上级路径
+cd - # 切换到上个路径
+
+ls # 列出当前路径下的文件
+ls -a # 包含隐藏文件
+ls -l # 查看详细信息
+ls -al # 包含隐藏文件且查看详细信息
+```
+
+#### 与文件操作相关
+
+```shell
+rm # 删除文件 因为会直接删除 所以小心使用
+rm -d testDirectory # 删除空文件夹
+rm -rf testDirectory # 删除文件夹 谨慎使用
+
+mv # 移动文件 原地移动相当于重命名
+cp # 复制文件
+
+find # 查找文件
+find . -name "*.cpp" -exec cp {} cpp-files \; # 查找当前文件夹下后缀名为`.cpp`的文件并将其复制到当前路径下的 cpp-files/ 文件夹中
+```
+
+#### 与纯文本相关
+
+```shell
+vim # 好用的命令行文本编辑器
+
+touch # 新建文本文件
+
+cat <file> # 查看文件内容
+head <file> # 查看文件的前十行
+```
+
+#### 与命令相关
+
+
+```shell
+clear # 清空当前的终端界面
+history # 查看历史命令
+上/下键 # 调出之前执行的命令
+
+man # 查看系统内关于某个命令的帮助
+xx --help (-h) # 查看某个命令行程序内置的帮助
+```
+
+#### 与进程相关
+
+```shell
+ps # report a snapshot of the current processes
+kill # send a signal to a process
+```
+
+`ps`可以查看当前的进程，`kill`可以给进程发送一些信号。由于我还没上过操作系统，对这些不是特别了解，大家可以直接用`man`命令来查看`ps`和`kill`的帮助（或百度）
+
+#### 其他shell操作
+
+##### which where
+
+```shell
+which # 查看shell如何解析你的输入
+where # 查看shell可能如何解析你的输入，第一条为which的结果
+```
+
+##### 输入输出流重定向
+
+还记得`echo`吗？
+
+```shell
+touch my.txt
+echo "hello world" > my.txt # 将输出覆盖到文件
+echo "hhhh" > my.txt # 将输出覆盖到文件
+echo "hahahaha" >> my.txt # 将输出追加到文件
+
+mkdir ha/haha 2> /dev/null # 忽略错误
+mkdir ha/haha 2>> error.log # 追加错误到日志文件中
+```
+
+〇 重定向符号
+
+* `>`：输出重定向到一个文件或设备 覆盖原来的文件
+* `>!`：输出重定向到一个文件或设备 强制覆盖原来的文件
+* `>>`：输出重定向到一个文件或设备 追加原来的文件
+* `<`：输入重定向到一个程序（如果你要做数算题，输入数据的时候可能会用到）
+* 注：这里文件指的是纯文本文件；设备中有一个比较特殊的是`/dev/null`，如果你不需要输出的信息，你可以将信息重定向到这里
+
+〇 输入和输出表示：主要有三种输出入的状况，分别是：
+
+1. 标准输入；代码为 `0` ；或称为 `stdin` ；使用的方式为 `<`
+2. 标准输出：代码为 `1` ；或称为 `stdout`；使用的方式为 `1>`
+3. 错误输出：代码为 `2` ；或称为 `stderr`；使用的方式为 `2>`
+
+（注：上述内容部分摘自[Linux中重定向及管道](https://blog.csdn.net/songyang516/article/details/6758256)）
+
+##### 管道
+
+`|`: 上一个命令（程序）的输出作为下一个命令的输入
+
+比如我想看看我刚刚创建了什么文件夹来着：我可以一条一条翻，但是我也可以搜索啊！
+
+```shell
+history
+history | grep "mkdir"
+```
+使用终端的快捷键⌃R也可以快速查找之前的命令。
+
+##### grep
+
+```
+$ man grep
+The grep utility searches any given input files, selecting lines that match one or more patterns.
+By default, a pattern matches an input line if the regular expression (RE) in the patternmatches the input line without its trailing newline.
+
+$ echo "123abc456" | grep "[0-9]"
+123abc456（1 2 3 4 5 6得到高亮）
+$ echo "123abc456" | grep "[0-9]*"
+123abc456（123 456得到高亮）
+$ echo "123abc456" | grep "[a-z]*"
+123abc456（abc得到高亮）
+
+$ grep "[0-9]" error.log
+```
+
+**正则表达式**可以用来搜索并进一步提取你想要的内容。正则表达式也是开发同学的必备技能，我推荐大家大家看[菜鸟教程｜正则表达式](https://www.runoob.com/regexp/regexp-tutorial.html)；还有一个正则表达测试的网站<https://regexr.com/5mtrl>
+
+##### ⌃C
+
+结束当前正在执行的程序；命令输到一半也用它来重新输。
+
+##### ⌃D
+
+退出一个shell。
+
+```shell
+$ echo $SHELL
+/bin/zsh
+$ bash
+bash-3.2$
+```
+
+我们可以通过⌃D退出。在后面**连接远程shell的时候**，也可以通过这种方式退出。
+
+##### 空格
+
+举例：创建一个含有空格的文件夹，结果发现创建了两个
+
+在空格之前加入`\`转义；或用 `""` `''` 包裹含有空格的文件和文件夹
+
+##### 通配符
+
+`*` 匹配任意多字符
+
+`?` 匹配单个字符
+
+```shell
+$ ls *.cpp # 列出当前文件夹下的所有cpp文件
+$ rm *.log # 删除当前文件夹下的所有日志文件
+```
+
+##### tab和右键补全
+
+当你在`shell`中输入一些东西之后，按`tab`可以获取补全，或多次按`tab`查看`shell`的提示；如果做了`shell`的个性化配置，按右键也根据历史命令进行补全。
+
+##### 文件和文件夹权限
+
+###### ls -l
+
+可以使用 `ls -l file` 查看文件/文件夹的权限。
+
+```
+$ ls -l test.txt
+-rw-r--r-- 1 re re 56 Jul  5 11:00 test.txt
+```
+
+第 `1` 位：文件类型。`d` 表示文件夹，`-` 表示文件；
+第 `2-4` 位：表示这个文件的owner拥有的权限；
+第 `5-7` 位：表示和这个文件owner所在同一个组的用户所具有的权限；
+第 `8-10` 位：其他用户所具有的权限；
+`r`: `read` 读，`w`: `write` 写，`x`: `execute` 执行，`-`: 无权限。
+
+###### chmod
+
+可以使用`chmod`修改文件和文件夹的权限（`chmod`, `change mode`, 修改文件、文件夹权限）：
+
+**1 文字设定法**
+
+```shell
+$ chmod  [u|g|o|a] [+|-|=] [rwx] file
+$ chmod ug+w,o-x a.txt # owner及同组增加写权限 其他用户删除执行权限
+```
+
+`u`: owner，`g`: 同组用户， `o`: 其他用户，`a`: 所有用户
+
+**2 数字设定法**
+
+```shell
+$ chmod [mode] file
+$ chmod 644 my.txt # owner可读写 同组和其他用户只可读。
+```
+
+* `mode` 为 3 位八进制数，每位由各权限按权重相加得到。从左往右依次代表owner、同组、其他用户的权限
+* `rwx` 对应的权重分别是 `4`, `2`, `1`
+
+注：大家以后在使用这个命令的时候，虽然可以一次把权限给的多一些，但最好还是小心一点，**能少一点就少一点**，以防止一些可能发生的「灾难」。
+
+##### 用户权限
+
+#### shell脚本
+
+如果我们一次执行一个命令，那用手敲的可能来的快一点。但是如果要**一次执行多条命令**，那可能还是写一个脚本一次性执行来的快一点。
+
+**脚本**（`script`），是使用一种特定的描述性语言，依据一定的格式编写的**可执行文件**。（来自百度百科）
+
+这里所说的**可执行文件**和之前的命令行程序是有区别的；脚本本质上是还是纯文本文件，它能执行是因为有**解释器**来对其中每一行命令做解析。比如`shell 脚本`就由`shell`来解析；`python 脚本 / 程序`就由`python`解释器来解析。
+
+##### 尝试编写shell脚本
+
+比如我们希望创建这样一个脚本——来批量显示当前文件夹下的所有文件和文件夹。注意，这不是`ls`命令，我想要递归显示。
+
+我们使用下面的`shell`脚本[kddeisz | GitHub | tree.sh](https://github.com/kddeisz/tree/blob/master/tree.sh)做一个演示：
+
+```sh
+#!/usr/bin/env bash
+
+shopt -s nullglob
+dir_count=0
+file_count=0
+
+traverse() {
+  dir_count=$(($dir_count + 1))
+  local directory=$1
+  local prefix=$2
+
+  local children=($directory/*)
+  local child_count=${#children[@]}
+
+  for idx in "${!children[@]}"; do 
+    local child=${children[$idx]// /\\ }
+    child=${child##*/}
+
+    local child_prefix="│   "
+    local pointer="├── "
+
+    if [ $idx -eq $((child_count - 1)) ]; then
+      pointer="└── "
+      child_prefix="    "
+    fi
+
+    echo "${prefix}${pointer}$child"
+    [ -d "$directory/$child" ] &&
+      traverse "$directory/$child" "${prefix}$child_prefix" ||
+      file_count=$((file_count + 1))
+  done
+}
+
+root="."
+[ "$#" -ne 0 ] && root="$1"
+echo $root
+
+traverse $root ""
+echo
+echo "$(($dir_count - 1)) directories, $file_count files"
+shopt -u nullglob
+```
+
+可以发现这个还是非常难理解的。
+
+```shell
+$ vim tree.sh # 一般shell脚本的后缀为`.sh`
+$ ./tree.sh # 执行shell脚本
+zsh: permission denied: ./tree.sh
+$ chmod +x tree.sh
+$ ./tree.sh
+.
+├── SayHello
+├── SayHello.cpp
+└── tree.sh
+
+0 directories, 3 files
+```
+
+##### shell脚本的优劣
+
+优点：你可以将多条命令写进`shell脚本`，一次执行。
+
+缺点：其并非编程语言，一些语法（甚至不能称作语法）晦涩难懂，缺少相关的debug工具（有是有）。
+
+我推荐大家在进行批处理的时候直接编写`python脚本`，现在这个时代，哪台机器上还没有个`Python3`呢？写过python的人都知道python写起来多舒服吧。我们可以在上面的脚本作者的仓库[GitHub | kddeisz | tree](https://github.com/kddeisz/tree)中找到`tree.py`，点进去一看，舒服多了ww。
+
+当然，有些`python`可能做不到的事情，那你就用`shell脚本`写喽。我这里也不详细说了，大家用到的时候可以自己查。学习如何编写`shell脚本`可以查看[Missing Semester｜Shell 工具和脚本](https://missing-semester-cn.github.io/2020/shell-tools/)
+
+#### shell配置文件
+
+`shell`是谁在用呢。当然是你在用了！配置文件写的爽，你用`shell`用起来就爽；每次`shell`开启的时候，都会先加载这个配置文件。我们不妨看看我电脑上的`zsh`配置文件：
+
+```shell
+$ cat ~/.zshrc
+……
+plugins=(
+    git
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+)
+……
+export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles
+export PATH="/usr/local/bin:$PATH"
+export PATH="/usr/local/sbin:$PATH"
+……
+alias ga="git add "
+alias gc="git commit -m "
+alias glg="git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias gs='git status'
+……
+alias ll="ls -alF"
+……
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+```
+
+像我呢，给我的`shell`添加了一些插件；更换了包管理工具（后面会讲到什么是包管理）`brew`的下载地址；添加了一些环境变量；设置了`Git`、`ls`的快捷键（`alias`）；为了避免一些`GBK`带来的问题，把系统的编码全部设置为`UTF-8`……
+
+你也可以自己修改你的配置文件——按照自己喜欢的来，网上也有很多可以参考的配置。当然了，改完了记得要让它生效：
+
+```shell
+$ source ~/.zshrc
+```
+
+当然直接重启终端或者`shell`也完全OK。
+
+补充：`shell`有很多种的。常用的可能有`bash`、`zsh`…当然了功能没什么区别，都是解析你输入的命令与命令行程序做交互，但可能一些设计细节上会有一些不同。配置文件也会有不同，比如`zsh`的配置文件在`~/.zshrc`，`bash`的配置文件在`~/.bash_profile`。
+
+#### 补充
+
+如果大家想对终端、`shell`、命令行深入了解，可以查看下面的课程的前五节课（全看当然最好啦）（这是对我帮助很大的一门课程）：
+
+[计算机教育中缺失的一课 The Missing Semester of Your CS Education 中文版](https://missing-semester-cn.github.io)
+
+这门课程的简介是这样的：
+
+```
+大学里的计算机课程通常专注于讲授从操作系统到机器学习这些学院派的课程或主题，而对于如何精通工具这一主题则往往会留给学生自行探索。
+在这个系列课程中，我们讲授命令行、强大的文本编辑器的使用、使用版本控制系统提供的多种特性等等。
+学生在他们受教育阶段就会和这些工具朝夕相处（在他们的职业生涯中更是这样）。 
+因此，花时间打磨使用这些工具的能力并能够最终熟练地、流畅地使用它们是非常有必要的。
+精通这些工具不仅可以帮助您更快的使用工具完成任务，并且可以帮助您解决在之前看来似乎无比复杂的问题。
+```
+
+### 命令行 与 GUI - Linux的常见发行版本
+
+上面我们聊了聊GUI程序、引入一般的程序（输入输出）、认识了类Unix操作系统的文件系统、使用了命令行程序；有了这些基础，我想大家已经有了认识Linux的基础了。下面就让我们来请出**Linux**吧——
+
+#### GUI 与 命令行
+
+不过要先解决一个小问题，我们已经有了GUI程序，看时间右上角就可以看、不需要`date`，文本编辑系统有自带的文本编辑、不需要`vim`，使用IDE（集成开发环境）、一个快捷键就能帮你运行程序、而且还有代码高亮、语法检测等多种功能；那么为什么要用命令行程序？
+
+（GUI程序占用的资源较多）考察GUI程序和命令行程序，**GUI程序操作方便，但其实它占用的资源非常多**（看我晃动鼠标，CPU的占用率就开始上升，只是晃动哦），至少机器得有个集成显卡来计算屏幕上什么时候显示什么吧；而命令行程序，其只是处理字符串的输入和输出，这样占用的资源是非常少的，所以效率高。
+
+（历史上先出现的是命令行操作系统）从历史上来说，最先面世的电脑操作系统肯定只有命令行的输入和输出；后来为了方便人们操作；加上了可以移动的光标和鼠标。事实上，GUI的操作系统肯定也是支持使用命令行程序的——我刚刚在演示时使用的操作系统是**macOS**，它就有终端，有shell，可以处理你敲入的命令。
+
+虽然GUI已经很方便了，但当我们**追求计算机计算意义上的高效**时，我们还是会使用只有命令行的操作系统。最常见只有命令行的操作系统就是`Linux`；或者我们有一些特殊的需求无法在`macOS`和`Windows`上完成时，我们可能也会使用`Linux`。下面我就开始真正讲`Linux`了。
+
+#### Linux 历史概述
+
+（注：本小节内容部分参考自 [电子系2020年暑培 Linux部分](https://github.com/eesast/training2020/tree/master/basic_tool/linux-webserver)  无76 孙志尧）
+
+##### Linux 和 Unix
+首先明确，`Linux`是一个操作系统，那它就有自己的内核。内核指的是一个提供设备驱动、文件系统、进程管理、网络通信等功能的系统软件，内核并不是一套完整的操作系统，它只是操作系统的核心。`Linux 内核`最初由 `Linus Torvalds` 编写。
+
+之前我们一直提到`类Unix操作系统`，大家看下面这张图可能马上就明白了。
+
+Linux 是一个类似 Unix 的操作系统，Unix 要早于 Linux，Linux 的初衷就是要替代 UNIX，并在功能和用户体验上进行优化，所以 Linux 模仿/改进了 UNIX（但并没有抄袭 UNIX 的源码），使得 Linux 在外观和交互上与 UNIX 非常类似。——[C语言中文网 | Linux和UNIX的关系及区别](http://c.biancheng.net/view/707.html)
+
+相比于 `UNIX`，`Linux` 最大的创新是开源免费，这是它能够蓬勃发展的最重要原因。
+
+![](media/16256552948044/16258416009918.jpg){width="300"}
+
+（从表中我们也可以看到，`macOS`也是`类Unix操作系统`，所以`macOS`终端的体验和`Linux`基本上是一致的）
+
+##### Linux 发行版
+
+一些组织或厂商将` Linux 内核`与`各种软件和文档`包装起来，并提供系统安装界面和系统配置、设定与管理工具，就构成了 `Linux的发行版本`。常见的发行版本有很多，比如`Ubuntu` `CentOS`…
+
+我们使用的也是这些`Linux发行版`，一般我们说的实际使用的`Linux操作系统`指的也是这些`Linux发行版`。
+
+补充：`Linux`也有像`macOS`和`Windows`一样的GUI版，相当于你在现在的电脑上刷一个新的操作系统；但我不是很推荐大家使用，除非你是Linux发烧友，也愿意花时间去学。大家感兴趣的话自己百度`Linux 桌面 发行版`吧。**我们一般说的Linux都是只有命令行的**。
+
+#### Linux 文件系统
+
+在`Linux`中，一切皆文件：
+
+* **普通文件**是文件；
+* **目录**是文件：目录文件包含了此目录中各个文件的文件名以及指向这些文件的指针，打开目录等同于打开目录文件；
+* **硬件设备**是文件：这些文件通常隐藏在 `/dev` 目录下，当进行设备读取或外设交互时才会被使用；
+* **套接字**（socket）是文件：套接字文件一般隐藏在 `/var/run` 目录下，用于进程间的网络通信；
+* **符号链接**（symbolic link）是文件：类似于的快捷方式，是指向另一文件的简介指针（也就是软链接）；
+* **管道**（pipe）是文件。
+
+![](media/16256552948044/16259144732636.jpg){width="300"}
+
+### 上手Linux
+
+#### 服务器
+
+说了这么久，大家还没见到`Linux`，我不妨直接拿一台`Linux`来吧。
+
+```
+ssh root@106.13.128.69
+```
+
+好 这样我们就连接上了一台`Linux`，这个是为了演示前几天买的`Linux` ww。你说，操作系统下连硬件，硬件呢？？因为我买的是百度云在保定的服务器（什么是服务器我们之后会讲），所以差不多就是在西南方向吧。也就是说，我通过网络连接到这台`Linux`，就可以对其进行使用啦；使用的方法就是敲命令。
+
+解释一下上面的命令：我是用本机的`ssh`命令（程序）与`ip地址`为`106.13.128.69`进行`ssh协议`的通讯，登陆用户为`root`。
+
+* `SSH` 是较可靠，专为远程登录会话和其他网络服务提供安全性的协议。——百度百科
+* `ip地址`需要查看你购买服务器的控制台。
+* `root`用户拥有`Linux`服务器最高的权限，类似`Windows`上的管理员；输入密码之后就可以进入服务器啦
+
+![](media/16256552948044/16258434011426.jpg){width="300"}
+
+我们可以看到，由于只是演示，所以我买了配置较低的服务器，其CPU只有一核，进入服务器进行查看：
+
+```shell
+$ cat /proc/cpuinfo
+……
+model name  : Intel(R) Xeon(R) Gold 6148 CPU @ 2.40GHz
+……
+```
+
+（服务器配置）这块CPU应该是要比绝大多数人电脑上装的CPU是强很多的（虽然可能这台服务器只能使用这个CPU一个核的资源）。内存2G不算很大；存储盘40G SSD；操作系统用的是`Ubuntu 20.04 LTS`（`LTS`, `long term support`）。安全组是什么我们在之后讲端口的时候会讲。
+
+好了这就是我们的`Linux`。`Linux`到手了，我们也能连接上了，接下来当然是要用`Linux`来做事情了。不过在这之前，我们先需要知道，一台云端的`Linux`服务器究竟能干什么。
+
+补充：如果你之后也有购买服务器的需求，作为学生，我们可以以学生优惠在多个平台享受低至一折的优惠。可以查看[GitHub ivmm | 教育优惠](https://github.com/ivmm/Student-resources)以获取更多信息。
+
+#### 其他方式
+
+##### WSL
+
+> 适用于 `Linux` 的 `Windows` 子系统可让开发人员直接在 `Windows` 上按原样运行 `GNU/Linux` 环境（包括大多数命令行工具、实用工具和应用程序），且不会产生传统虚拟机或双启动设置开销。
+
+具体安装请查看刘雪枫（xfgg）所写的WSL教程
+
+##### 虚拟机
+
+操作系统作为软件和硬件的桥梁，不同的操作系统上肯定运行着不同的软件，下面也有着不同的硬件。也就是说，一般一个操作系统使用的硬件，可能并不能运行另一个操作系统。虚拟机则可以模拟出系统所需的硬件环境，从而在硬件上跑其他的操作系统。比如使用`Mac`的同学一般都会有一个虚拟机软件，用来开`Windows`虚拟机。
+
+我们也可以使用虚拟机来装`Linux`。不过这时你装到的可能更多是图形界面的`Linux`。
+
+##### Docker
+
+`Docker`和虚拟机差不多，不过比虚拟机效率更高，占用的资源更少。我们这次暑培也有`Docker`相关的课程，大家到时候可以尝试使用`Docker`安装`Linux`系统。
+
+#### 配置ssh连接
+
+##### 无需密码登陆
+
+```
+ssh root@106.13.128.69
+cd /root
+chmod 700 .ssh
+cd /root/.ssh
+touch authorized_keys
+chmod 600 authorized_keys
+vim authorized_keys
+```
+
+然后将本地`~/.ssh/id_rsa.pub`中的全部内容复制到`vim`编辑器中, 保存退出即可
+
+一般我们都用账号和密码来登陆；但是这样并不很安全，也许会有一些途径让别人探到你的密码。一种更安全的方式是使用密钥进行登陆。
+
+![](media/16256552948044/16258910628691.jpg){width="300"}
+
+##### 给ssh配置端口和用户名
+
+本机：
+
+```shell
+$ vim ~/.ssh/config
+## add
+host bdy
+    user root
+    hostname 106.13.128.69
+$ ssh bdy # 不用每次都输ip地址了
+```
+
+#### 云端Linux服务器的功能
+
+刚刚我演示了我们之前讲过的一些命令行程序，这些程序当然可以用。不过我们是可以做一些更强的事情的。
+
+这台机器上有硬盘，我可以把文件丢进去让别人访问——也许可以做个**云盘**；如果写了网站丢上去，那也许可以做个**电商平台**；CPU这么好，不妨装个python来跑机器学习的**训练模型**吧；如果再装个GPU，提高一下网络带宽，做视频剪辑的**渲染农场**也说不定？
+
+云端`Linux服务器`和普通的电脑本质是一样的，只是它的CPU更强，系统是`Linux`，二十四小时开机，随便你怎么折腾，不在你身边，风扇怎么转也吵不到你。跑个机器学习动辄几天几周，扔到服务器上去跑吧；有个网站想让别人二十四小时都能访问，扔到服务器上去吧。
+
+那为什么把这样的一台电脑叫做服务器呢？处理请求 == 提供服务。比如我想从我同学的电脑上拷一张图，我可以把U盘给ta，ta拷好再把U盘还给我；不过网络都这么发达了，ta可以把图先发到服务器，然后我告诉服务器说，「我要那一张图」，然后服务器就把那张图发给我；那如果是很多人都想要这张图，那么原本 有那张图的人只需要上传一次到服务器，想要这张图的人都往服务器发请求「给我图」，然后服务器就返回给你对应的图片资源。
+
+差不多就是，处理很多人发的请求的机器就是服务器吧；同时处理很多人的请求，那就需要很强的`I/O能力`，所以CPU当然要很厉害啦。服务器有很多的端口，一般来说，一个端口对应一个服务。比如你可以在一个端口部署一个数据库，一个端口用来让用户访问网页，一个端口来提供ssh连接服务器的服务……（为了确保安全性，你需要在你购买云服务的控制台确认安全组的开放情况，安全组也就是允许建立连接的端口）
+
+为什么服务器大多数都是`Linux`呢（约97%），这是因为`Linux`是开源的，开源的操作系统是免费的，所以用`Linux`成本是很低的；开源也加速`Linux`不断迭代维护升级，其也越来越好用易用。
+
+##### 网站部署
+
+###### 访问网站的流程
+
+访问一个网站，本质上经过了下面的一些步骤：
+
+* 用户在浏览器（客户端）敲入域名
+* 该域名通过DNS变为需要访问的服务器的ip地址
+* 客户端和服务端（Linux服务器）建立连接并发送互联网请求
+* 服务端处理该请求
+* 服务端向客户端返回对应的资源（网页、图片等）
+* 浏览器收到返回的资源进行渲染呈现在用户的屏幕上
+
+###### 部署网页
+
+接下来我们就简单在服务器上搭建一个静态网页，可以让大家来查看此次的讲稿吧。
+
+###### 安装nginx
+
+首先来装个`nginx`吧：
+
+```shell
+$ apt update
+$ apt install nginx
+```
+
+这时我们访问`106.13.128.69`就能看到`Nginx的欢迎界面`了。
+
+注1：**Nginx** （读作 `engine X`）是一个高性能的网页、反向代理、负载均衡服务器。`Nginx` 运行在服务器端，**监听服务器的某个端口并做出响应**，以达到提供 web 服务的目的。
+
+###### 包管理apt
+
+注2：**apt**是`Linux服务器`上的包管理工具（`apt`, `Advanced Packaging Tool`, 是 `Ubuntu` 自带的包管理工具）。我们在`Linux`中使用的都是命令行程序，那么如何安装这些命令行程序呢？安装一些程序的时候它有相当多的依赖（即这个程序要调用其他的命令行程序），怎么管理这些呢？都用包管理工具就好了。
+
+〇 `apt`常用命令：
+
+* `apt update`：更新软件源中的所有软件列表，建议在执行安装或更新操作前，先执行该指令。
+* `apt list`：列出所有软件包
+* `apt list --upgradable`：列出所有可供更新的软件包
+* `apt upgrade`：升级软件包
+* `apt install <package_name>`：安装软件包
+* `apt remove <package_name>`：卸载软件包
+* `apt purge <package_name>`：清除软件包（包含软件包和它的配置文件）
+* `apt search <package_name>`：搜索软件包
+* `apt show <package_name>`：显示软件包的信息
+
+〇 `apt`的几个缺省路径：
+
+* 下载的软件存放位置：`/var/cache/apt/archives`
+* 安装后软件默认位置：`/usr/share`
+* 可执行文件位置：`/usr/bin`
+* 配置文件位置：`/etc`
+* 库文件位置：`/usr/lib`
+
+###### 部署
+
+再写个网页，改一下`nginx的配置文件`吧。
+
+```shell
+$ mkdir /root/website
+$ cd /root/website
+$ vim index.html
+$ cat /etc/nginx/nginx.conf # 查看配置
+$ vim /etc/nginx/conf.d/test.conf # 自己配置
+## add followings
+server{
+  listen 23333;
+  server_name 106.13.128.69;
+        location / {
+        root /home/yxj/website/;
+        }
+}
+$ nginx -s reload
+```
+
+如果`listen 23333;`注意需要在服务器的安全组中添加这个端口才能在浏览器中访问（需要输入`ip:23333`才能访问）；如果`listen 80;`且没有备案,`server_name;`是必须的（可直接输入ip地址访问）
+
+（我们之后会有更好的方式将这次讲稿部署出来的hh）
+
+###### 部署可以交互的小游戏
+
+刚刚我们放上去的仅仅是一个静态页面。静态指的是你不能通过点击和页面进行交互。
+
+如法炮制，我们把小游戏部署上去。首先我们需要写出来一个小游戏，并且将其build为网页。关于这一步怎么做，后面开发网站的时候大概会讲到，这不是我们今天的重点；这一步我已经提前做好了，build完成的网页在我的电脑上`/Users/yangxijie/Desktop/Linux/react-game-build`。如何将其上传至服务器呢？
+
+```shell
+scp -r /Users/yangxijie/Desktop/Linux/react-game-build bdy:/home/yxj/react-game
+$ vim /etc/nginx/conf.d/test.conf
+## add followings
+server{
+  listen 2333;
+  server_name 106.13.128.69;
+        location / {
+        root /home/yxj/react-game/;
+        }
+}
+$ nginx -s reload
+```
+
+注：但其实这么部署不太好，你应该用域名；我在这里就不演示了。
+
+##### 程序编译 和 tmux
+
+当然`Linux`服务器还可以做很多事情，比如帮我编译程序。我选取`x265`视频编码器的源码来给大家演示一下。（实际使用的编译联机管理工具是`make`，当代码文件多起来的时候，一条条命令肯定不够用，我们需要一套工具针对修改过的文件分别编译链接）
+
+但其实这里我更想告诉大家的是 `tmux`。在`Linux`上执行很多任务，都是需要花时间的，比如几个小时？或者你需要一个程序 / 脚本24h运行；但你用ssh连接到服务器，如果我们退出服务器，当前的对话（`session`，`当前开启的shell`）就会被终止。如果我们希望退出服务器的时候，服务器的任务能够继续执行，我们需要用`tmux`
+
+```shell
+$ tmux new -s <session-name> # 新建会话
+$ tmux detach # 分离会话（并未结束）（⌃B d）
+$ exit # 结束会话（⌃D）
+
+$ tmux ls # 查看当前所有的会话
+$ tmux attach -t <session-name> # 接入会话
+
+$ tmux kill-session -t <session-name> # 杀死会话
+$ wget -c https://bitbucket.org/multicoreware/x265_git/downloads/x265_3.5.tar.gz # 下载软件包
+
+$ tmux new -s x265
+
+$ tar -zxvf x265_3.5.tar.gz
+$ cd x265_3.5/build/linux
+$ ./make-Makefiles.bash
+$ make
+
+⌃B d # 退出当前 tmux session
+
+⌃ D # 退出服务器
+
+$ ssh bdy
+$ tmux attach -t x265 # 重新连接会话，可以看到已经编译完成了
+```
+
+到这里，我们想到，我们可以在服务器上执行一些编译、测试的任务。是的，大家之后使用到`GitHub Actions`或者有一些自己的测试任务，就可以将它们部署到服务器上。
+
+补充：很好的`tmux命令`整理 [阮一峰的网络日志｜tmux使用教程](http://www.ruanyifeng.com/blog/2019/10/tmux.html)
+
+#### Linux作为开发环境？
+
+> `Linux` 是一种自由和开源类 `UNIX` 操作系统。`Linux` 系统工具链完整，简单操作就可以配置出合适的开发环境，可以简化开发过程，减少开发中仿真工具的障碍，使系统具有较强的移植性，因此我们在软件开发中会经常使用到 `Linux` 操作系统。所以，了解 `Linux` 系统以及相关工具的基本使用是非常重要的。
+
+上为推送的简介。
+
+不过事实上，在开发的过程中，我们一般会用`macOS`和`Windows`编写代码，然后使用`Linux`作为测试、部署工具，`Linux`是很好的`开发环境`——真要说开发，**写代码**，那当然还是开个`VS Code`或者`IDE`要方便一些；可能会有真正的大佬用`vim`在`Linux`上写程序也说不准。`Linux`作为可以快速部署的环境，24h开机提供服务，有着高性能的CPU和磁盘，这些是它的**优势**。在该使用`Linux`的地方使用`Linux`，让开发的流程简化、效率提升吧。
+
+- - -
+
+## 总结
+
+这次讲座，我们学习的核心是**使用命令行**。在了解**终端**和**shell**的使用之后，我们使用**Linux服务器**进行了演示。这次讲座也包含了很多**计算机相关的基础知识**。
+
+〇 拓展：请阅读 从 MIT 协议谈契约精神 https://mp.weixin.qq.com/s/WyBZpChPA5xLo90rBHi8Mw 学习和了解开源以及开源协议相关的内容，并回答问题：MIT协议中有一句话THE SOFTWARE IS PROVIDED "XX XX"，"XX XX"代表的英文单词是（）；它的中文意思是（）。
+
+注：还是希望大家看懂文章之后提炼一下的。有的同学直接复制粘贴有点过于省事儿了哈
+
+## 后记
+
+### 点点经验之谈
+
+闲聊一下我的经验之谈吧：
+
+* Google is your best friend.
+* 能让机器做的事情，自己别做；机器做不了的事情，想办法让机器做；想不到办法，自己做
+* 学无止境，尤其是不断发展的信息行业
+* 该看文档就一字不落的看文档，文档永远比别人做的教程要清楚
+
