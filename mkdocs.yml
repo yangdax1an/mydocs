@@ -27,6 +27,8 @@ nav:
       - Markdown使用方法: ToolsNote/Markdown/Markdown.md
     - Linux:
       - Linux使用方法: ToolsNote/Linux/LinuxNotes.md
+    - Git:
+      - Git教程: ToolsNote/Git/Git.md
   - 讲稿:
     - LECTURE/index.md
     - Linux:
