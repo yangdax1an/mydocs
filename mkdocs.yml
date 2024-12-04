@@ -29,6 +29,8 @@ nav:
       - Linux使用方法: ToolsNote/Linux/LinuxNotes.md
     - Git:
       - Git教程: ToolsNote/Git/Git.md
+    - Shell:
+      - Shell美化教程: ToolsNote/Shell/beautify-Shell.md
   - 讲稿:
     - LECTURE/index.md
     - Linux:
