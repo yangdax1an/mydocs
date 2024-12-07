@@ -31,6 +31,13 @@ nav:
       - Git教程: ToolsNote/Git/Git.md
     - Shell:
       - Shell美化教程: ToolsNote/Shell/beautify-Shell.md
+  - 左成云b站视频笔记:
+    - zuo-Algorithm/index.md
+    # - 基础篇:
+    - 基础提升篇:
+      - 哈希表与哈希函数: zuo-Algorithm/level2/Hash.md
+  #   - 中级提升篇:
+  #   - 高级进阶篇:
   - 讲稿:
     - LECTURE/index.md
     - Linux:
