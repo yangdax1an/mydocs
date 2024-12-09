@@ -36,6 +36,7 @@ nav:
     # - 基础篇:
     - 基础提升篇:
       - 哈希表与哈希函数: zuo-Algorithm/level2/Hash.md
+      - 岛问题和并查集: zuo-Algorithm/level2/UnionFind.md
   #   - 中级提升篇:
   #   - 高级进阶篇:
   - 讲稿:
