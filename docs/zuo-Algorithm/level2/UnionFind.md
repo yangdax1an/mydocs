@@ -144,43 +144,43 @@ public class Code03_Islands {
 
 并查集的重要思想在于，**用集合中的一个元素代表集合**。我曾看过一个有趣的比喻，把集合比喻成**帮派**，而代表元素则是**帮主**。接下来我们利用这个比喻，看看并查集是如何运作的。
 
-![](/media/UnionFind-1.png)
+![](./media/UnionFind-1.png)
 
 最开始，所有大侠各自为战。他们各自的帮主自然就是自己。*（对于只有一个元素的集合，代表元素自然是唯一的那个元素）*
 
 现在 1 号和 3 号比武，假设 1 号赢了（这里具体谁赢暂时不重要），那么 3 号就认 1 号作帮主 *（合并 1 号和 3 号所在的集合，1 号为代表元素）*。
 
-![](/media/UnionFind-2.png)
+![](./media/UnionFind-2.png)
 
 现在 2 号想和 3 号比武 *（合并 3 号和 2 号所在的集合）*，但 3 号表示，别跟我打，让我帮主来收拾你*（合并代表元素）*。不妨设这次又是 1 号赢了，那么 2 号也认 1 号做帮主。
 
-![](/media/UnionFind-3.jpg)
+![](./media/UnionFind-3.jpg)
 
 现在我们假设 4、5、6 号也进行了一番帮派合并，江湖局势变成下面这样：
 
-![](/media/UnionFind-4.jpg)
+![](./media/UnionFind-4.jpg)
 
 现在假设 2 号想与 6 号比，跟刚刚说的一样，喊帮主 1 号和 4 号出来打一架（帮主真辛苦啊）。1 号胜利后，4 号认 1 号为帮主，当然他的手下也都是跟着投降了。
 
-![](/media/UnionFind-5.png)
+![](./media/UnionFind-5.png)
 
 好了，比喻结束了。如果你有一点图论基础，相信你已经觉察到，这是一个**树**状的结构，要寻找集合的代表元素，只需要一层一层往上访问**父节点**（图中箭头所指的圆），直达树的**根节点**（图中橙色的圆）即可。根节点的父节点是它自己。我们可以直接把它画成一棵树：
 
-![](/media/UnionFind-6.jpg)
+![](./media/UnionFind-6.jpg)
 
 ### 路径压缩
 
 最简单的并查集效率是比较低的。例如，来看下面这个场景：
 
-![](/media/UnionFind-7.jpg)
+![](./media/UnionFind-7.jpg)
 
 现在我们要 merge (2,3)，于是从 2 找到 1，fa [1]=3，于是变成了这样：
 
-![](/media/UnionFind-8.jpg)
+![](./media/UnionFind-8.jpg)
 
 然后我们又找来一个元素 4，并需要执行 merge (2,4)：
 
-![](/media/UnionFind-9.png)
+![](./media/UnionFind-9.png)
 
 从 2 找到 1，再找到 3，然后 fa [3]=4，于是变成了这样：
 
@@ -188,23 +188,23 @@ public class Code03_Islands {
 
 怎么解决呢？我们可以使用**路径压缩**的方法。既然我们只关心一个元素对应的**根节点**，那我们希望每个元素到根节点的路径尽可能短，最好只需要一步，像这样：
 
-![](/media/UnionFind-10.png)
+![](./media/UnionFind-10.png)
 
 >  其实这说来也很好实现。只要我们在查询的过程中，**把沿途的每个节点的父节点都设为根节点**即可。***下一次再查询时，我们就可以省很多事***。
 
-![](/media/UnionFind-code1.png)
+![](./media/UnionFind-code1.png)
 
 这个就代表我们那个圈，就是不管什么类型进来我们就先让变成一个集合 (像是), 相当于给他包装一层就是这个 element 类
 
-![](/media/UnionFind-code2.png)
+![](./media/UnionFind-code2.png)
 
 > 并查集使用的前提就是初始化的时候把所有数据给我们了，这样我们才可以挨个包装成 Element 然后你接着可以做检查是不是同一集合，以及把两个不是同一个集合的合并成一个集合这种操作。注意这里面数据只是针对于你一开始初始化的，不能使用别的数据
 
-![](/media/UnionFind-code3.png)
+![](./media/UnionFind-code3.png)
 
-![](/media/UnionFind-code4.png)
+![](./media/UnionFind-code4.png)
 
-![](/media/UnionFind-code5.png)
+![](./media/UnionFind-code5.png)
 
 > 所以我们只需要调用并查集的构造函数把所有数据传进去
 >
@@ -330,7 +330,7 @@ public class Code04_UnionFind {
 
 首先，使用两个 CPU:
 
-![img](/media/UnionFind-11.png)
+![img](./media/UnionFind-11.png)
 
 其实我们整个来看就一个岛，但是
 
@@ -346,11 +346,11 @@ public class Code04_UnionFind {
 
 比如说处理我们左边的 CPU 的数据
 
-![img](/media/UnionFind-12.png)
+![img](./media/UnionFind-12.png)
 
 右边同理:
 
-![img](/media/UnionFind-13.png)
+![img](./media/UnionFind-13.png)
 
 做合并:
 
@@ -360,7 +360,7 @@ public class Code04_UnionFind {
 
 - **我们对于 (分割的) 边缘那块连在一起的集合 (如果他们不是同一个集合) 让他们连在一起**，然后让总共岛数 - 1
 
-![](/media/UnionFind-14.png)
+![](./media/UnionFind-14.png)
 
 此时集合是 {A,C} {B}
 
@@ -378,6 +378,6 @@ public class Code04_UnionFind {
 
 多个 CPU:
 
-![img](/media/UnionFind-15.png)
+![img](./media/UnionFind-15.png)
 
 > **同理，分成好多块，然后让每一个 CPU 收集四边 (四边都要！) 的信息，然后就可以之后合并就跟四边都要合并一下**，最后合并成一大块，速度当然非常快
